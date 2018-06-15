@@ -22,7 +22,7 @@ public class Workout {
 	@JsonIgnore
 	private User user;
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy="workout", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Exercise> exercises;
 
 	public int getId() {
