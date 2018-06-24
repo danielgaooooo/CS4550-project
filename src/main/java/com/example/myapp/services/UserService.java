@@ -19,7 +19,7 @@ import com.example.myapp.models.User;
 import com.example.myapp.repositories.UserRepository;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 public class UserService {
 	@Autowired
 	UserRepository repo;
@@ -66,8 +66,11 @@ public class UserService {
 			if (newUser.getLastName() != null) {
 				user.setLastName(newUser.getLastName());
 			}
-			if (newUser.getWorkouts() != null) {
-				user.setWorkouts(newUser.getWorkouts());
+			if (newUser.getEmail() != null) {
+				user.setEmail(newUser.getEmail());
+			}
+			if (newUser.getPhone() != null) {
+				user.setPhone(newUser.getPhone());
 			}
 			repo.save(user);
 			return user;
@@ -82,7 +85,7 @@ public class UserService {
 				.findUserByCredentials(user.getUsername(), user.getPassword()));
 		if (current.size() > 0) {
 			session.setAttribute("currentUser", current);
-			return current.get(0);
+			return ((List<User>)session.getAttribute("currentUser")).get(0);
 		} else {
 			User newUser = new User();
 			newUser.setUsername("");
@@ -98,9 +101,8 @@ public class UserService {
 
 	@GetMapping("/api/profile")
 	public User profile(HttpSession session) {
-		User currentUser = (User)
-				session.getAttribute("currentUser");	
-		return currentUser;
+		List<User> currentUser = (List<User>)session.getAttribute("currentUser");	
+		return currentUser.get(0);
 	}
 
 
@@ -123,6 +125,16 @@ public class UserService {
 			return this.createUser(user);
 		} else {
 			return null;
+		}
+	}
+	
+	@GetMapping("/api/user/loggedIn")
+	public User checkIfLoggedIn(HttpSession session) {
+		List<User> currentUser = (List<User>) session.getAttribute("currentUser");
+		if (currentUser == null) {
+			return new User();
+		} else {
+			return currentUser.get(0);
 		}
 	}
 }

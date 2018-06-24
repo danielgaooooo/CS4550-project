@@ -18,6 +18,8 @@ public class Workout {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
+	private String name;
+	
 	@ManyToOne
 	@JsonIgnore
 	private User user;
@@ -47,5 +49,13 @@ public class Workout {
 
 	public void setExercises(List<Exercise> exercises) {
 		this.exercises = exercises;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

@@ -1,5 +1,6 @@
 package com.example.myapp.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,7 +19,9 @@ public class User {
 	private String password;
 	private String firstName;
 	private String lastName;
-	
+	private String email;
+	private String phone;
+
 	@OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Workout> workouts;
 
@@ -68,5 +71,21 @@ public class User {
 
 	public void setWorkouts(List<Workout> workouts) {
 		this.workouts = workouts;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }
