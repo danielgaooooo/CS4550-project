@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.myapp.models.Exercise;
 import com.example.myapp.models.User;
 import com.example.myapp.models.Workout;
+import com.example.myapp.repositories.ExerciseRepository;
 import com.example.myapp.repositories.UserRepository;
 import com.example.myapp.repositories.WorkoutRepository;
 
@@ -28,6 +30,9 @@ public class WorkoutService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ExerciseRepository exerciseRepository;
 
 
 	@DeleteMapping("/api/workout/{workoutId}")
@@ -69,7 +74,8 @@ public class WorkoutService {
 		Optional<User> data = this.userRepository.findById(userId);
 		if (data.isPresent()) {
 			User user = data.get();
-			return user.getWorkouts();
+			List<Workout> workouts = user.getWorkouts();
+			return workouts;
 		} else {
 			return null;
 		}
@@ -80,8 +86,20 @@ public class WorkoutService {
 		Optional<User> userData = this.userRepository.findById(userId);
 		if (userData.isPresent()) {
 			User user = userData.get();
-			workout.setUser(user);
-			return this.workoutRepository.save(workout);
+			Workout temp = new Workout();
+		
+			temp.setUser(user);
+			temp.setName(workout.getName());
+			this.workoutRepository.save(temp);
+			for (Exercise e : workout.getExercises()) {
+				Exercise exClone = new Exercise();
+				exClone.setDescription(e.getDescription());
+				exClone.setMuscle(e.getMuscle());
+				exClone.setName(e.getName());
+				exClone.setWorkout(temp);
+				this.exerciseRepository.save(exClone);
+			}
+			return temp;
 		} else {
 			return null;
 		}

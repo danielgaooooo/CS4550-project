@@ -1,5 +1,6 @@
 package com.example.myapp.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class Exercise {
 	private String description;
 	private String muscle;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Workout workout;
 	
