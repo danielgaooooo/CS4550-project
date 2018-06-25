@@ -74,4 +74,16 @@ public class WorkoutService {
 			return null;
 		}
 	}
+	
+	@PostMapping("/api/user/{userId}/workout")
+	public Workout addWorkoutToUser(@PathVariable("userId") int userId, @RequestBody Workout workout) {
+		Optional<User> userData = this.userRepository.findById(userId);
+		if (userData.isPresent()) {
+			User user = userData.get();
+			workout.setUser(user);
+			return this.workoutRepository.save(workout);
+		} else {
+			return null;
+		}
+	}
 }
