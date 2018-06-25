@@ -23,7 +23,7 @@ public class Exercise {
 	private String description;
 	private String muscle;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JsonIgnore
 	private Workout workout;
 	
